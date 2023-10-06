@@ -1,35 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useEffect, useState } from "react";
+import TodoList from "./components/TodoList";
+import AddTodo from "./components/AddTodo";
+import { ITodo } from "./types/todo";
+import "primereact/resources/themes/lara-light-indigo/theme.css";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [todos, setTodos] = useState<ITodo[]>([]);
+
+  useEffect(() => {
+    const storedTodos = localStorage.getItem('todos');
+    if (storedTodos && typeof storedTodos === 'string') {
+      setTodos(JSON.parse(storedTodos));
+    }
+  }, []);
+
+  const addTodo = (todo: ITodo) => {
+    const newTodos = [...todos, todo];
+
+    setTodos(newTodos);
+    localStorage.setItem('todos', JSON.stringify(newTodos));
+  }
+
+  const editTodo = (id: string, newTodo: ITodo) => {
+    const updatedTodos = todos.map((todo) => todo.id === id ? newTodo : todo);
+    setTodos(updatedTodos);
+    localStorage.setItem('todos', JSON.stringify(updatedTodos));
+  }
+
+  const removeTodo = (id: string) => {
+    const removedTodos = todos.filter((todo) => todo.id !== id);
+
+    setTodos(removedTodos);
+    localStorage.setItem('todos', JSON.stringify(removedTodos));
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="app-container">
+      <h1>Todo App</h1>
+      <AddTodo addTodo={addTodo} />
+      <TodoList todos={todos} editTodo={editTodo} removeTodo={removeTodo} />
+    </div>
+  );
 }
 
-export default App
+export default App;

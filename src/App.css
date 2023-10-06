@@ -1,0 +1,36 @@
+.app-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.input-container {
+    display: flex;
+    gap: 1rem;
+}
+
+.todo-list-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2rem;
+    min-width: 300px;
+}
+
+.no-todo-message {
+    text-align: center;
+}
+
+.todo-item-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    gap: 3rem;
+}
+
+.btn-container {
+    display: flex;
+    margin-left: auto;
+    gap: 1rem;
+}
